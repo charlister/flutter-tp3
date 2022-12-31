@@ -27,10 +27,6 @@ class _QuestionPageState extends State<QuestionPage> {
     userResponse = "";
   }
 
-  void resetChosenButton() {
-
-  }
-
   @override
   Widget build(BuildContext context) {
     String themeName = ModalRoute.of(context)!.settings.arguments as String;
@@ -216,7 +212,7 @@ class _QuestionPageState extends State<QuestionPage> {
           fontStyle: FontStyle.normal,
           fontWeight: FontWeight.bold
         ),
-        shape: ContinuousRectangleBorder()
+        shape: const ContinuousRectangleBorder()
       ),
       child: const Text(
           "suivant"

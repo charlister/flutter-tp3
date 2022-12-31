@@ -30,7 +30,7 @@ class QuestionModel {
     data['text'] = this.text;
     data['response'] = this.response;
     data['options'] = this.options;
-    data['theme'] = this.theme;
+    data['theme'] = this.theme.toString().toLowerCase();
     data['themeImageLink'] = this.themeImageLink;
     return data;
   }

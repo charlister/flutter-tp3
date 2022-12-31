@@ -133,7 +133,7 @@ class _AddPageState extends State<AddPage> {
           TextFormField(
             onChanged: (value) {
               debugPrint('============== theme : $value');
-              newTheme = value.trim();
+              newTheme = value.trim().toLowerCase();
               if (themesName.contains(newTheme.toLowerCase())) {
                 setState(() {
                   isThemeExists = true;
