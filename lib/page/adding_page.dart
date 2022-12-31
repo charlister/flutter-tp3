@@ -55,12 +55,12 @@ class _AddPageState extends State<AddPage> {
               builder: (context, state) {
                 if (state is ThemeInitial) {
                   BlocProvider.of<ThemeCubit>(context).getThemes();
-                  print("theme page initial");
-                  return Text("initial");
+                  debugPrint("theme page initial");
+                  return const Text("initial");
                 }
                 else if (state is ThemeLoading) {
-                  print("theme page loading");
-                  return Text("loading");
+                  debugPrint("theme page loading");
+                  return const Text("loading");
                 }
                 else if (state is ThemeLoaded) {
                   themesName = state.themes.map((theme) => theme.name.toString()).toList();
@@ -68,8 +68,8 @@ class _AddPageState extends State<AddPage> {
                   return themesName.isNotEmpty ? menuSelectExistingThemes(themesName) : const Center(child: Text("Aucun thème enregistré"),);
                 }
                 else {
-                  print("theme page error");
-                  return Text("error");
+                  debugPrint("theme page error");
+                  return const Text("error");
                 }
               },
             ),
@@ -106,7 +106,7 @@ class _AddPageState extends State<AddPage> {
         // affiche l'image sélectionnée
         selectedImage != null
             ? Image.file(selectedImage!)
-            : Container(height: 200, child: const Center(child: Text('Aucune image sélectionnée'))),
+            : const SizedBox(height: 200, child: Center(child: Text('Aucune image sélectionnée'))),
         // bouton pour sélectionner une image
         TextButton(
           onPressed: () async {
@@ -119,7 +119,7 @@ class _AddPageState extends State<AddPage> {
               // User canceled the picker
             }
           },
-          child: Text('Sélectionner une image'),
+          child: const Text('Sélectionner une image'),
         ),
       ],
     );
@@ -133,7 +133,7 @@ class _AddPageState extends State<AddPage> {
           TextFormField(
             onChanged: (value) {
               debugPrint('============== theme : $value');
-              newTheme = value;
+              newTheme = value.trim();
               if (themesName.contains(newTheme.toLowerCase())) {
                 setState(() {
                   isThemeExists = true;
@@ -147,7 +147,7 @@ class _AddPageState extends State<AddPage> {
             },
             decoration: const InputDecoration(labelText: 'Thème'),
             validator: (value) {
-              if (value!.isEmpty) {
+              if (value!.isEmpty || value!.trim().isEmpty) {
                 return 'Veuillez entrer la question';
               }
               return null;
@@ -156,11 +156,11 @@ class _AddPageState extends State<AddPage> {
           TextFormField(
             onChanged: (value) {
               debugPrint('============== question : $value');
-              question = value;
+              question = value.trim();
             },
             decoration: const InputDecoration(labelText: 'Question'),
             validator: (value) {
-              if (value!.isEmpty) {
+              if (value!.isEmpty || value!.trim().isEmpty) {
                 return 'Veuillez entrer la question';
               }
               return null;
@@ -169,11 +169,11 @@ class _AddPageState extends State<AddPage> {
           TextFormField(
             onChanged: (value) {
               debugPrint('============== response : $value');
-              response = value;
+              response = value.trim();
             },
             decoration: const InputDecoration(labelText: 'Réponse'),
             validator: (value) {
-              if (value!.isEmpty) {
+              if (value!.isEmpty || value!.trim().isEmpty) {
                 return 'Veuillez entrer la réponse';
               }
               return null;
@@ -182,11 +182,11 @@ class _AddPageState extends State<AddPage> {
           TextFormField(
             onChanged: (value) {
               debugPrint('============== option 1 : $value');
-              options[0] = value;
+              options[0] = value.trim();
             },
             decoration: const InputDecoration(labelText: 'option 1'),
             validator: (value) {
-              if (value!.isEmpty) {
+              if (value!.isEmpty || value!.trim().isEmpty) {
                 return "Veuillez entrer l'option 1";
               }
               return null;
@@ -195,14 +195,14 @@ class _AddPageState extends State<AddPage> {
           TextFormField(
             onChanged: (value) {
               debugPrint('============== option 2 : $value');
-              options[1] = value;
+              options[1] = value.trim();
             },
             decoration: const InputDecoration(labelText: 'option 2'),
           ),
           TextFormField(
             onChanged: (value) {
               debugPrint('============== option 3 : $value');
-              options[2] = value;
+              options[2] = value.trim();
             },
             decoration: const InputDecoration(labelText: 'option 3'),
           ),
@@ -224,7 +224,15 @@ class _AddPageState extends State<AddPage> {
                   debugPrint("valide");
                   try {
                     // bool b = await themeRepository.getTheme(newTheme.toLowerCase());
-                    List<String> tmp = [...options, response];
+                    // List<String> tmp = [...options, response];
+                    List<String> tmp = [];
+                    for(var option in options) {
+                      if (option.trim() != "") {
+                        tmp.add(option);
+                      }
+                    }
+                    tmp.add(response);
+                    debugPrint('**************************$tmp');
                     tmp.shuffle();
                     isThemeExists ?
                     {
@@ -243,7 +251,7 @@ class _AddPageState extends State<AddPage> {
                     {
                       imageLink = await fileRepository.registerFile(selectedImage!),
                       themeRepository.addTheme(newTheme, imageLink!),
-                      questionRepository.addQuestion(question, response, newTheme, [...options, response], imageLink!),
+                      questionRepository.addQuestion(question, response, newTheme, tmp, imageLink!),
                       Fluttertoast.showToast(
                         msg: "thème et question enregistrés",
                         toastLength: Toast.LENGTH_SHORT,
@@ -257,6 +265,15 @@ class _AddPageState extends State<AddPage> {
                     };
                   } on Exception {
                     debugPrint("Error ...");
+                    Fluttertoast.showToast(
+                      msg: "une erreur est survenue",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
                   } finally {
                     addButtonClickable = true;
                   }
