@@ -1,16 +1,11 @@
 # tp3
 
-A new Flutter project.
+App de Quizz avec Flutter et Firebase.
 
-## Getting Started
+Présentation de quelques données affichées dans Firebase - Cloud Firestore.
 
-This project is a starting point for a Flutter application.
+![image](https://user-images.githubusercontent.com/56521890/210153870-803bfb54-b15a-45e8-b685-8212909012a5.png)
 
-A few resources to get you started if this is your first Flutter project:
+Présentation de quelques données affichées dans Firebase - Storage.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![image](https://user-images.githubusercontent.com/56521890/210153904-23448555-e109-4ec6-8cd1-e773993b57c2.png)
