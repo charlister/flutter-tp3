@@ -13,7 +13,6 @@ class FileRepository {
     await uploadTask.then((res) async {
       imageUrl = await res.ref.getDownloadURL();
     });
-    while(imageUrl == "");
     return imageUrl;
   }
 }
